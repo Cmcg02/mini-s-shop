@@ -1,11 +1,9 @@
 import express from 'express'
-import { SELECTusersAll } from './db/orders.js'
+import userRouter from './routes/user.js'
 const server = express()
 
-server.get('/', (req, res, next) => {
-    const response = SELECTusersAll
-    console.log(response)
-    res.sendStatus(200)
-})
+server.use(express.json())
+
+server.use('/user', userRouter)
 
 server.listen(3000, ()=>console.log('listening on port 3000'))
