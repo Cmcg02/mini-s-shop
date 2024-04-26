@@ -1,51 +1,57 @@
 import express, { response } from 'express'
 import { userData } from '../db/users.js'
+import { veryify, admin } from './auth.js'
+import bcrypt from 'bcrypt'
 const userRouter = express.Router()
 
-userRouter.get('/all', async (req, res, next)=>{
-    const response = await userData.getAll()
-    res.send(response)
+userRouter.get('/', veryify, admin, async (req, res)=>{
+    const users = await userData.getAll()
+    if(!users)
+        res.sendStatus(500).end()
+    else
+        res.status(200).json({users}).end()
 })
 
-userRouter.get('/:id', async (req, res, next)=>{
-    const response = await userData.getById(req.params.id)
-    res.send(response)
+userRouter.get('/:id', veryify, async (req, res)=>{
+    const user = await userData.getById(req.params.id)
+    if(!user)
+        res.sendStatus(404).end()
+    else
+        res.status(200).json({user})
 })
 
-userRouter.post('/login', async (req, res, next)=>{
-    const {email, password} = req.body 
-    const response = await userData.getByEmail(email)
-    res.send(response)
-})
-
-userRouter.post('/signup', async (req, res, next)=>{
-    const {name, email, password} = req.body
-    const response = await userData.add(name, email, password)
-    res.send(response)
-})
-
-userRouter.put('/:id', async (req, res, next)=>{
+userRouter.put('/:id', veryify, async (req, res)=>{
     const {name, email, password} = req.body
     const {id} = req.params
-    if(name){
-        const eRes = await userData.update.name(id, name)
-    }
-    if(email){
-        const nRes = await userData.update.email(id, email)
-    }
-    if(password){
-        const pRes = await userData.update.password(id, password)
-    }
-    const response  = await userData.getById(id)
-    res.send(response)
-    
-})
+    var user = await userData.getById(id)
 
-userRouter.delete('/:id', async (req, res, next)=>{
-    const response = await userData.remove(req.params.id)
-    res.send(response)
-})
+    if(req.session.role !== '88x0' && id ==! req.session.user){
+        res.sendStatus(401).end()
+    }else{
 
-userRouter.get('/logout', (req, res, next)=>{})
+        if(!user)
+            res.sendStatus(404).end()
+        else{
+            var n, e, p = true
+
+            if(name)
+                n = await userData.update.name(id, name)
+            if(email)
+                e = await userData.update.email(id, email)
+            if(password){
+                const hash = await bcrypt.hash(password, 10)
+                p = await userData.update.password(id, hash)
+            }
+            user = await userData.getById(id)
+
+            if(!(n && e && p && user))
+                res.sendStatus(500).end()
+            else
+                res.status(200).json(user)
+            
+        }
+    }
+
+})
 
 export default userRouter
