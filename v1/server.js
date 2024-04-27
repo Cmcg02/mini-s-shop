@@ -5,6 +5,7 @@ import { SESSION_SECRET } from './config.js'
 import authRouter from './routes/auth.js'
 import cookieParser from 'cookie-parser'
 import productsRouter from './routes/products.js'
+import cartRouter from './routes/cart.js'
 const store = new session.MemoryStore()
 const server = express()
 
@@ -20,10 +21,13 @@ server.use(session({
     saveUninitialized: false,
     store
 }))
+
 server.use('/user', userRouter)
 
 server.use('/auth', authRouter)
 
 server.use('/products', productsRouter)
+
+server.use('/cart', cartRouter)
 
 server.listen(3000, ()=>console.log('listening on port 3000'))
