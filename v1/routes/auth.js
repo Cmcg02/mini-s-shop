@@ -3,6 +3,20 @@ import { userData } from '../db/users.js'
 import bcrypt from 'bcrypt'
 const authRouter = express.Router()
 
+const isLoggedIn = (req, res, next) => {
+    if(!req.session.auth){
+        res.sendStatus(401).end()
+    }else
+        next()
+}
+
+const isAdmin = (req, res, next) => {
+    if(req.session.role !== '88x0')
+        res.sendStatus(401).end()
+    else   
+        next()
+}
+
 authRouter.post('/login', async (req, res)=>{
     const {email, password} = req.body 
 
@@ -70,27 +84,13 @@ authRouter.post('/signup', async (req, res)=>{
 
 })
 
-const veryify = (req, res, next) => {
-    if(!req.session.auth){
-        res.sendStatus(401).end()
-    }else
-        next()
-}
-
-authRouter.get('/logout', veryify, (req, res) => {
+authRouter.get('/logout', isLoggedIn, (req, res) => {
     req.session.user = false
     req.session.auth = false
     req.session.role = false;
     res.sendStatus(200).end()
 })
 
-const admin = (req, res, next) => {
-    if(req.session.role !== '88x0')
-        res.sendStatus(401).end()
-    else   
-        next()
-}
-
-export {veryify, admin}
+export {isLoggedIn, isAdmin}
 
 export default authRouter
