@@ -22,7 +22,7 @@ authRouter.post('/login', async (req, res)=>{
 
     const user = await userData.getByEmail(email)
     if(!user)
-        res.sendStatus(404).json({msg: 'user not found'}).end()
+        res.sendStatus(404).end()
 
     else{
         const compare = bcrypt.compare(password, user.hash)
@@ -36,7 +36,7 @@ authRouter.post('/login', async (req, res)=>{
             res.status(200).send(user).end()
         }
     }
-})
+}) 
 
 const passwordStrength = (password) => {
     var str = 0

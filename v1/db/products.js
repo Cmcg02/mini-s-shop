@@ -19,7 +19,7 @@ const getByCategory = async (category) => {
             .catch(e=>console.log(e))
 }
 const updateName = async (id, name) => {
-    return await DATA.query(
+    return await DATA.query( 
         'UPDATE products SET name = $1 WHERE id = $2', [name, id])
             .then(d=>d)
             .catch(e=>console.log(e))
@@ -48,21 +48,15 @@ const updateCategory = async (id, category) => {
             .then(d=>d)
             .catch(e=>console.log(e))
 }
-const updateSize = async (id, size) => {
-    return await DATA.query(
-        'UPDATE products SET size = $1 WHERE id = $2', [size, id])
-            .then(d=>d)
-            .catch(e=>console.log(e))
-}
 const remove = async (id) => {
     return await DATA.query(
         'DELETE FROM products WHERE id = $1', [id])
             .then(d=>console.log(d))
             .catch(e=>console.log(e))
 }
-const add = async (name, description, price, stock, category, size) => {
+const add = async (name, description, price, stock, category,) => {
     return await DATA.query(
-        'INSERT INTO products (name, description, price, stock, category, size) VALUES ($1, $2, $3, $4, $5, $6)', [name, description, price, stock, category, size])
+        'INSERT INTO products (name, description, price, stock, category) VALUES ($1, $2, $3, $4, $5)', [name, description, price, stock, category])
             .then(d=>{console.log(d); return true})
             .catch(e=>console.log(e))
 }
@@ -76,8 +70,7 @@ export const productData = {
         description: updateDescription,
         price: updatePrice,
         category: updateCategory,
-        stock: updateStock,
-        size: updateSize
+        stock: updateStock
     },
     add, 
     remove

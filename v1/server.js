@@ -6,6 +6,7 @@ import authRouter from './routes/auth.js'
 import cookieParser from 'cookie-parser'
 import productsRouter from './routes/products.js'
 import cartRouter from './routes/cart.js'
+import ordersRouter from './routes/orders.js'
 const store = new session.MemoryStore()
 const server = express()
 
@@ -29,5 +30,7 @@ server.use('/auth', authRouter)
 server.use('/products', productsRouter)
 
 server.use('/cart', cartRouter)
+
+server.use('/orders', ordersRouter)
 
 server.listen(3000, ()=>console.log('listening on port 3000'))

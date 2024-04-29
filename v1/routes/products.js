@@ -12,8 +12,8 @@ productsRouter.get('/', async (req, res)=>{
 })
 
 productsRouter.post('/', isLoggedIn, isAdmin, async (req, res) => {
-    const {name, description, stock, price, category, size} = req.body
-    const response = await productData.add(name, description, price, stock, category, size)
+    const {name, description, stock, price, category} = req.body
+    const response = await productData.add(name, description, price, stock, category)
     if(!response)
         res.sendStatus(500)
     else{
@@ -40,7 +40,7 @@ productsRouter.get('/:id', async(req, res) => {
 })
 
 productsRouter.put('/:id', isLoggedIn, isAdmin, async (req, res)=>{
-    const {name, description, stock, price, category, size} = req.body
+    const {name, description, stock, price, category} = req.body
     const {id} = req.params
 
     var product = await productData.getById(id)
@@ -58,8 +58,6 @@ productsRouter.put('/:id', isLoggedIn, isAdmin, async (req, res)=>{
             p = await productData.update.price(id, price)
         if(category)
             c = await productData.update.category(id, category)
-        if(size)
-            s = await productData.update.size(id, size)
 
         product = await productData.getById(id)
 

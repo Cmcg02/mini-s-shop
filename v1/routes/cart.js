@@ -1,5 +1,6 @@
 import express from 'express'
 import { productData } from '../db/products.js'
+import { isLoggedIn } from './auth.js'
 const cartRouter = express.Router()
 
 cartRouter.use((req, res, next) => {
@@ -7,14 +8,14 @@ cartRouter.use((req, res, next) => {
         req.session.cart = []
     }
     next()
-})
+}, isLoggedIn)
 
-const calculateTotal = (req, res, next) => {
+export const calculateTotal = (req, res, next) => {
     const cart = req.session.cart
     var total = 0
 
     cart.forEach(item => {
-        total=item.product.price*item.quantity
+        total+=item.product.price*item.quantity
     });
     req.session.total = total
     next()
@@ -76,6 +77,13 @@ const removeItem = (req, res, next) => {
 const sendCart = (req, res) => {
     const {cart, total} = req.session
     res.json({cart, total}).end()
+}
+
+
+
+const clearCart = (req, res, next ) => {
+    req.session.cart = []
+    next()
 }
 
 cartRouter.post('/:id', addProduct)
