@@ -108,7 +108,7 @@ ordersRouter.get('/', isLoggedIn, async (req, res) => {
     }
 })
 
-ordersRouter.post('/checkout', isLoggedIn, calculateTotal, checkout, resetCart, sendOrder)
+ordersRouter.post('/', isLoggedIn, calculateTotal, checkout, resetCart, sendOrder)
 
 ordersRouter.put('/:id', isLoggedIn, isAdmin, async (req, res, next)=>{
     const {id} = req.params

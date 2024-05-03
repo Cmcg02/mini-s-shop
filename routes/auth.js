@@ -17,7 +17,7 @@ const isAdmin = (req, res, next) => {
         next()
 }
 
-authRouter.post('/login', async (req, res)=>{
+authRouter.post('/', async (req, res)=>{
     const {email, password} = req.body 
 
     const user = await userData.getByEmail(email)

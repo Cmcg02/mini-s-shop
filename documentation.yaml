@@ -1,0 +1,521 @@
+openapi: 3.0.1
+info:
+  title: mini's shop
+  version: 1.0.0
+  description: ecommerce api project
+paths:
+  /auth:
+    post:
+      summary: login as an existing user with an email and password
+      description: >-
+        takes email and password in the body.  It finds user, compares the input password with the hashed password in the database. If successful it stores the user id in session storage
+        passes
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "name": "guest",
+                        "hash": "$2b$10$f1lQcKC3D7AcIdEJ1/1e8e2wY1OT7Pmk7pjnE9eCHt1H66L4XtbUa",
+                        "email": "guest@dnd.com",
+                        "id": 10,
+                        "role": "00x0"
+                    }
+      tags:
+        - Auth
+  /auth/signup:
+    post:
+      summary: create a new user and login.
+      description: >-
+        takes name, email and password in the body. creates a new user with a hashed password. If successful it saves the user id in session storage.
+        to the session
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "name": "trial",
+                        "hash": "$2b$10$5l14VC3Vm5jgzplF7vFeSuaRsNTyl01drHzBM0RiVTeyMyjlIjfIW",
+                        "email": "trial@dnd.com",
+                        "id": 11,
+                        "role": "00x0"
+                    }
+      tags:
+        - Auth
+  /auth/logout:
+    get:
+      summary: remove session data
+      description: 'Removes the user id, auth and role from the session storage'
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: OK
+      tags:
+        - Auth
+  /cart/:id:
+    summary: update the cart
+    post:
+      summary: Add a new item to the cart with item = id
+      description: >-
+        uses the id in the params to find the item. It then adds the item to an array that is saved in the session storage
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "cart": [
+                            {
+                                "product": {
+                                    "id": 5,
+                                    "name": "stone wall: 1",
+                                    "description": "A module stone wall 1 tile long",
+                                    "stock": 300,
+                                    "category": "terrain",
+                                    "price": 300
+                                },
+                                "quantity": 1
+                            }
+                        ],
+                        "total": 300
+                    }
+      tags:
+        - Cart
+    put:
+      summary: increase/decrease the quantity of item = id
+      description: takes a quantity and increases the item in the cart by that amount
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "cart": [
+                            {
+                                "product": {
+                                    "id": 5,
+                                    "name": "stone wall: 1",
+                                    "description": "A module stone wall 1 tile long",
+                                    "stock": 300,
+                                    "category": "terrain",
+                                    "price": 300
+                                },
+                                "quantity": 1
+                            }
+                        ],
+                        "total": 300
+                    }
+      tags:
+        - Cart
+    delete:
+      summary: remove an item from the cart with item = id
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "cart": [
+                            {
+                                "product": {
+                                    "id": 5,
+                                    "name": "stone wall: 1",
+                                    "description": "A module stone wall 1 tile long",
+                                    "stock": 300,
+                                    "category": "terrain",
+                                    "price": 300
+                                },
+                                "quantity": 1
+                            }
+                        ],
+                        "total": 300
+                    }
+      tags:
+        - Cart
+  /products:
+    get:
+      summary: Get all products
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "products": [
+                            {
+                                "id": 5,
+                                "name": "stone wall: 1",
+                                "description": "A module stone wall 1 tile long",
+                                "stock": 300,
+                                "category": "terrain",
+                                "price": 300
+                            },
+                            {
+                                "id": 6,
+                                "name": "stone wall: 2",
+                                "description": "A module stone wall 2 tile long",
+                                "stock": 450,
+                                "category": "terrain",
+                                "price": 450
+                            },
+                            {
+                                "id": 7,
+                                "name": "stone wall: 3",
+                                "description": "A module stone wall 3 tile long",
+                                "stock": 400,
+                                "category": "terrain",
+                                "price": 550
+                            },
+                            {
+                                "id": 8,
+                                "name": "Wooden wall: 3",
+                                "description": "A module wooden wall 3 tile long",
+                                "stock": 600,
+                                "category": "terrain",
+                                "price": 550
+                            }
+                    ]
+                    }
+      tags:
+        - Products
+    post:
+      summary: add a new product
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: '200'
+      tags:
+        - Products
+  /products/category/:category:
+    get:
+      summary: get all products under category
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "products": [
+                            {
+                                "id": 11,
+                                "name": "Tavern Patrons",
+                                "description": "3 Bartenders and 3 bouncers. 5 seated and 8 standing patrons. 8 rats and 2 giant rats. 1 cat and 1 hound",
+                                "stock": 50,
+                                "category": "minis",
+                                "price": 180
+                            },
+                            {
+                                "id": 12,
+                                "name": "Orc Tribe",
+                                "description": "1 War cheif and 3 Bruzers. 4 archers and 8 foot soldiers. 8 goblin slaves.",
+                                "stock": 80,
+                                "category": "minis",
+                                "price": 200
+                            },
+                            {
+                                "id": 13,
+                                "name": "Knights Order",
+                                "description": "1 Prince Rider and 1 Prince standing. 5 cavalry. 8 shield knights. 8 spear men. 4 archers. 1 warmage.",
+                                "stock": 40,
+                                "category": "minis",
+                                "price": 400
+                            }
+                        ]
+                    }
+      tags:
+        - Products
+  /products/:id:
+    get:
+      summary: get a single product with the id
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                successful:
+                  value: |-
+                    {
+                        "product": {
+                            "id": 16,
+                            "name": "Green",
+                            "description": "Set of 7 Green Die",
+                            "stock": 100,
+                            "category": "dice",
+                            "price": 20
+                        }
+                    }
+      tags:
+        - Products
+    put:
+      summary: edit the product with the matching id
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "product": {
+                            "id": 14,
+                            "name": "Blue",
+                            "description": "Set of 7 Blue Die",
+                            "stock": 100,
+                            "category": "dice",
+                            "price": 20
+                        }
+                    }
+      tags:
+        - Products
+    delete:
+      summary: remove the product with the matching id
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: OK
+      tags:
+        - Products
+  /orders:
+    get:
+      summary: get all orders
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    [
+                        {
+                            "user": "guest",
+                            "reference": "0509482b-b1f7-478c-a128-f1dbcc80c265",
+                            "total": 550,
+                            "completed": false
+                        }
+                    ]
+      tags:
+        - Orders
+    post:
+      summary: checkout a new order
+      description: process a payment and if successful then add the order to the database
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "user": 10,
+                        "order": "0509482b-b1f7-478c-a128-f1dbcc80c265",
+                        "total": 550,
+                        "completed": false,
+                        "items": [
+                            {
+                                "user": 10,
+                                "name": "stone wall: 3"
+                            }
+                        ]
+                    }
+      tags:
+        - Orders
+  /orders/:id:
+    get:
+      summary: get the order and all its products with the id
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "user": 10,
+                        "order": "0509482b-b1f7-478c-a128-f1dbcc80c265",
+                        "total": 550,
+                        "completed": false,
+                        "items": [
+                            {
+                                "user": 10,
+                                "name": "stone wall: 3"
+                            }
+                        ]
+                    }
+      tags:
+        - Orders
+    put:
+      summary: mark an order as complete
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "user": 10,
+                        "order": "0509482b-b1f7-478c-a128-f1dbcc80c265",
+                        "total": 550,
+                        "completed": false,
+                        "items": [
+                            {
+                                "user": 10,
+                                "name": "stone wall: 3"
+                            }
+                        ]
+                    }
+      tags:
+        - Orders
+  /users:
+    get:
+      summary: get all users
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: |-
+                    {
+                        "users": [
+                            {
+                                "name": "guest",
+                                "hash": "$2b$10$f1lQcKC3D7AcIdEJ1/1e8e2wY1OT7Pmk7pjnE9eCHt1H66L4XtbUa",
+                                "email": "guest@dnd.com",
+                                "id": 10,
+                                "role": "00x0"
+                            },
+                            {
+                                "name": "trial",
+                                "hash": "$2b$10$5l14VC3Vm5jgzplF7vFeSuaRsNTyl01drHzBM0RiVTeyMyjlIjfIW",
+                                "email": "trial@dnd.com",
+                                "id": 11,
+                                "role": "00x0"
+                            }
+                        ]
+                    }
+      tags:
+        - Users
+  /users/:id:
+    get:
+      summary: get a single user
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: >-
+                    {
+
+                    "name": "trial",
+
+                    "hash":
+                    "$2b$10$5l14VC3Vm5jgzplF7vFeSuaRsNTyl01drHzBM0RiVTeyMyjlIjfIW",
+
+                    "email": "trial@dnd.com",
+
+                    "id": 11,
+
+                    "role": "00x0"
+                     }
+      tags:
+        - Users
+    put:
+      summary: Change a single users details
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                'Successful ':
+                  value: OK
+      tags:
+        - Users
+tags:
+  - name: Auth
+    description: gain access to the api
+  - name: Users
+    description: perform queries on the user table
+  - name: Products
+    description: 'perform queries on the products table '
+  - name: Cart
+    description: 'add/remove items from a cart '
+  - name: Orders
+    description: perform queries on the orders table
