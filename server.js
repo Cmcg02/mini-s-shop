@@ -10,6 +10,8 @@ import ordersRouter from './routes/orders.js'
 const store = new session.MemoryStore()
 const server = express()
 
+
+
 server.use(express.json())
 server.use(cookieParser())
 server.use(express.urlencoded({ extended: false }))
@@ -22,6 +24,8 @@ server.use(session({
     saveUninitialized: false,
     store
 }))
+
+server.use((req, res, next) => {res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001"); next()})
 
 server.use('/user', userRouter)
 

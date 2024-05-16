@@ -19,16 +19,13 @@ const isAdmin = (req, res, next) => {
 
 authRouter.post('/', async (req, res)=>{
     const {email, password} = req.body 
-
     const user = await userData.getByEmail(email)
     if(!user)
         res.sendStatus(404).end()
-
     else{
-        const compare = bcrypt.compare(password, user.hash)
+        const compare = await bcrypt.compare(password, user.hash)
         if(!compare)
-            res.sendStatus(401).json({msg: 'email or password incorrect'}).end()
-
+            res.status(401).json({msg: 'email or password incorrect'}).end()
         else{
             req.session.auth = true;
             req.session.user = user.id
@@ -58,7 +55,6 @@ const passwordStrength = (password) => {
 
 authRouter.post('/signup', async (req, res)=>{
     const {name, email, password} = req.body
-
     if(
         (typeof name !== 'string' || name.length > 50 || !name.match(/[a-z]/i))
     ||
